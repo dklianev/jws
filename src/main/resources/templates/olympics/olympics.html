@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments :: head"></head>
+<body>
+<header th:replace="fragments :: header"></header>
+<h4>Olympics:</h4>
+<div class="col-10">
+    <h3 th:unless="${olympics} and ${olympics.size()}">There are no olympics!</h3>
+    <table th:if="${olympics} and ${olympics.size()>0}" class="table table-hover">
+        <th>Id</th>
+        <th>Name</th>
+        <th>Host City</th>
+        <th>Country</th>
+        <th>Start Date</th>
+        <th>End Date</th>
+        <th>View</th>
+        <th>Edit</th>
+        <th>Delete</th>
+        <tr th:each="item : ${olympics}">
+            <td th:text="${item.id}"></td>
+            <td th:text="${item.name}"></td>
+            <td th:text="${item.hostCity}"></td>
+            <td th:text="${item.country}"></td>
+            <td th:text="${item.startDate}"></td>
+            <td th:text="${item.endDate}"></td>
+            <td><a class="btn btn-secondary" th:href="@{'/olympics/view-olympics/'+${item.id}}">View</a></td>
+            <td><a class="btn btn-info" th:href="@{'/olympics/edit-olympics/'+${item.id}}">Edit</a></td>
+            <td><a class="btn btn-danger" th:href="@{'/olympics/delete/'+${item.id}}">Delete</a></td>
+        </tr>
+    </table>
+    <a class="btn btn-primary" href="/olympics/create-olympics">Save Olympics</a>
+</div>
+<footer th:replace="fragments :: footer"></footer>
+</body>
+</html>
