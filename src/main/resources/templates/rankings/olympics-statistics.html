@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments :: head"></head>
+<body>
+<header th:replace="fragments :: header"></header>
+<h4>Olympics Statistics</h4>
+<div class="col-8">
+    <table th:if="${statistics}" class="table table-hover">
+        <tr>
+            <td>Olympics</td>
+            <td th:text="${statistics.olympicsName}"></td>
+        </tr>
+        <tr>
+            <td>Average Age</td>
+            <td th:text="${statistics.averageAge}"></td>
+        </tr>
+        <tr>
+            <td>Youngest Medalist</td>
+            <td th:text="${statistics.youngestMedalist != null ? statistics.youngestMedalist.name : ''}"></td>
+        </tr>
+        <tr>
+            <td>Oldest Medalist</td>
+            <td th:text="${statistics.oldestMedalist != null ? statistics.oldestMedalist.name : ''}"></td>
+        </tr>
+    </table>
+</div>
+<footer th:replace="fragments :: footer"></footer>
+</body>
+</html>

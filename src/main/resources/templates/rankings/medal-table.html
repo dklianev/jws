@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments :: head"></head>
+<body>
+<header th:replace="fragments :: header"></header>
+<h4>Medal Table</h4>
+<div class="col-8">
+    <table th:if="${medals} and ${medals.size()>0}" class="table table-hover">
+        <th>Country</th>
+        <th>Gold</th>
+        <th>Silver</th>
+        <th>Bronze</th>
+        <th>Total</th>
+        <tr th:each="row : ${medals}">
+            <td th:text="${row.country}"></td>
+            <td th:text="${row.goldMedals}"></td>
+            <td th:text="${row.silverMedals}"></td>
+            <td th:text="${row.bronzeMedals}"></td>
+            <td th:text="${row.totalMedals}"></td>
+        </tr>
+    </table>
+</div>
+<footer th:replace="fragments :: footer"></footer>
+</body>
+</html>

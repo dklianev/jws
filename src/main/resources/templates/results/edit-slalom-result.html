@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments :: head"></head>
+<body>
+<header th:replace="fragments :: header"></header>
+<h4>Edit Slalom Result</h4>
+<div class="col-6">
+    <form action="#" th:action="@{/results/slalom/update/{id}(id=${result.id})}" th:object="${result}" method="post">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+        <div class="form-group">
+            <label for="firstRunTime">First Run Time</label>
+            <input class="form-control" type="text" th:field="*{firstRunTime}" id="firstRunTime">
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" th:field="*{firstRunDnf}" id="firstRunDnf">
+                <label class="form-check-label" for="firstRunDnf">First Run DNF</label>
+            </div>
+            <label for="secondRunTime">Second Run Time</label>
+            <input class="form-control" type="text" th:field="*{secondRunTime}" id="secondRunTime">
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" th:field="*{secondRunDnf}" id="secondRunDnf">
+                <label class="form-check-label" for="secondRunDnf">Second Run DNF</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" th:field="*{qualifiedForSecondRun}" id="qualifiedForSecondRun">
+                <label class="form-check-label" for="qualifiedForSecondRun">Qualified For Second Run</label>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Update Result</button>
+    </form>
+</div>
+<footer th:replace="fragments :: footer"></footer>
+</body>
+</html>
