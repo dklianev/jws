@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments :: head"></head>
+<body>
+<header th:replace="fragments :: header"></header>
+<h4>Slalom Competition Details</h4>
+<div class="col-6">
+    <table class="table table-hover">
+        <tr>
+            <th>Id</th>
+            <td th:text="${competition.id}"></td>
+        </tr>
+        <tr>
+            <th>Name</th>
+            <td th:text="${competition.name}"></td>
+        </tr>
+        <tr>
+            <th>Gender</th>
+            <td th:text="${competition.gender}"></td>
+        </tr>
+        <tr>
+            <th>Date</th>
+            <td th:text="${competition.competitionDate}"></td>
+        </tr>
+        <tr>
+            <th>Min Age</th>
+            <td th:text="${competition.minAge}"></td>
+        </tr>
+        <tr>
+            <th>Olympics</th>
+            <td th:text="${competition.olympicsName}"></td>
+        </tr>
+        <tr>
+            <th>Cutoff</th>
+            <td th:text="${competition.secondRunCutoff}"></td>
+        </tr>
+    </table>
+    <a class="btn btn-info" th:href="@{'/slalom-competitions/edit-slalom-competition/'+${competition.id}}">Edit</a>
+    <a class="btn btn-secondary" href="/slalom-competitions">Back</a>
+</div>
+<footer th:replace="fragments :: footer"></footer>
+</body>
+</html>

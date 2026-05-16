@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments :: head"></head>
+<body>
+<header th:replace="fragments :: header"></header>
+<h4>Create Athlete</h4>
+<div class="col-6">
+    <form action="#" th:action="@{/athletes/create}" th:object="${athlete}" method="post">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+        <div class="form-group">
+            <label for="firstName">First Name</label>
+            <input class="form-control" type="text" th:field="*{firstName}" placeholder="First Name" id="firstName">
+            <span class="text-danger" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}">First Name Error</span>
+            <label for="lastName">Last Name</label>
+            <input class="form-control" type="text" th:field="*{lastName}" placeholder="Last Name" id="lastName">
+            <span class="text-danger" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}">Last Name Error</span>
+            <label for="country">Country</label>
+            <input class="form-control" type="text" th:field="*{country}" placeholder="Country" id="country">
+            <span class="text-danger" th:if="${#fields.hasErrors('country')}" th:errors="*{country}">Country Error</span>
+            <label for="gender">Gender</label>
+            <select class="form-control" th:field="*{gender}" id="gender">
+                <option th:each="gender : ${genders}" th:value="${gender}" th:text="${gender}"></option>
+            </select>
+            <label for="dateOfBirth">Date Of Birth</label>
+            <input class="form-control" type="date" th:field="*{dateOfBirth}" id="dateOfBirth">
+        </div>
+        <button type="submit" class="btn btn-primary">Save Athlete</button>
+    </form>
+</div>
+<footer th:replace="fragments :: footer"></footer>
+</body>
+</html>

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments :: head"></head>
+<body>
+<header th:replace="fragments :: header"></header>
+<h4>Biathlon Competitions:</h4>
+<div class="col-10">
+    <h3 th:unless="${competitions} and ${competitions.size()}">There are no biathlon competitions!</h3>
+    <table th:if="${competitions} and ${competitions.size()>0}" class="table table-hover">
+        <th>Id</th>
+        <th>Name</th>
+        <th>Gender</th>
+        <th>Date</th>
+        <th>Min Age</th>
+        <th>Laps</th>
+        <th>Shooting</th>
+        <th>Penalty</th>
+        <th>View</th>
+        <th>Edit</th>
+        <th>Delete</th>
+        <tr th:each="competition : ${competitions}">
+            <td th:text="${competition.id}"></td>
+            <td th:text="${competition.name}"></td>
+            <td th:text="${competition.gender}"></td>
+            <td th:text="${competition.competitionDate}"></td>
+            <td th:text="${competition.minAge}"></td>
+            <td th:text="${competition.lapsCount}"></td>
+            <td th:text="${competition.shootingStagesCount}"></td>
+            <td th:text="${competition.penaltySecondsPerMiss}"></td>
+            <td><a class="btn btn-secondary" th:href="@{'/biathlon-competitions/view-biathlon-competition/'+${competition.id}}">View</a></td>
+            <td><a class="btn btn-info" th:href="@{'/biathlon-competitions/edit-biathlon-competition/'+${competition.id}}">Edit</a></td>
+            <td><a class="btn btn-danger" th:href="@{'/biathlon-competitions/delete/'+${competition.id}}">Delete</a></td>
+        </tr>
+    </table>
+    <a class="btn btn-primary" href="/biathlon-competitions/create-biathlon-competition">Save Biathlon Competition</a>
+</div>
+<footer th:replace="fragments :: footer"></footer>
+</body>
+</html>

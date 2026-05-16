@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments :: head"></head>
+<body>
+<header th:replace="fragments :: header"></header>
+<h4>Athletes:</h4>
+<div class="col-10">
+    <h3 th:unless="${athletes} and ${athletes.size()}">There are no athletes!</h3>
+    <table th:if="${athletes} and ${athletes.size()>0}" class="table table-hover">
+        <th>Id</th>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>Country</th>
+        <th>Gender</th>
+        <th>Date Of Birth</th>
+        <th>Edit</th>
+        <th>Delete</th>
+        <tr th:each="athlete : ${athletes}">
+            <td th:text="${athlete.id}"></td>
+            <td th:text="${athlete.firstName}"></td>
+            <td th:text="${athlete.lastName}"></td>
+            <td th:text="${athlete.country}"></td>
+            <td th:text="${athlete.gender}"></td>
+            <td th:text="${athlete.dateOfBirth}"></td>
+            <td><a class="btn btn-info" th:href="@{'/athletes/edit-athlete/'+${athlete.id}}">Edit</a></td>
+            <td><a class="btn btn-danger" th:href="@{'/athletes/delete/'+${athlete.id}}">Delete</a></td>
+        </tr>
+    </table>
+    <a class="btn btn-primary" href="/athletes/create-athlete">Save Athlete</a>
+</div>
+<footer th:replace="fragments :: footer"></footer>
+</body>
+</html>

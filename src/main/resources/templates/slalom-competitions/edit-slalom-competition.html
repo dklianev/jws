@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments :: head"></head>
+<body>
+<header th:replace="fragments :: header"></header>
+<h4>Edit Slalom Competition</h4>
+<div class="col-6">
+    <form action="#" th:action="@{/slalom-competitions/update/{id}(id=${competition.id})}" th:object="${competition}" method="post">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+        <div class="form-group">
+            <label for="name">Name</label>
+            <input class="form-control" type="text" th:field="*{name}" id="name">
+            <label for="gender">Gender</label>
+            <select class="form-control" th:field="*{gender}" id="gender">
+                <option th:each="gender : ${genders}" th:value="${gender}" th:text="${gender}"></option>
+            </select>
+            <label for="minAge">Minimum Age</label>
+            <input class="form-control" type="number" th:field="*{minAge}" id="minAge">
+            <label for="competitionDate">Competition Date</label>
+            <input class="form-control" type="date" th:field="*{competitionDate}" th:value="*{competitionDate}" id="competitionDate">
+            <label for="olympicsId">Olympics</label>
+            <select class="form-control" th:field="*{olympicsId}" id="olympicsId">
+                <option th:each="item : ${olympicsList}" th:value="${item.id}" th:text="${item.name}"></option>
+            </select>
+            <label for="secondRunCutoff">Second Run Cutoff</label>
+            <input class="form-control" type="number" th:field="*{secondRunCutoff}" id="secondRunCutoff">
+        </div>
+        <button type="submit" class="btn btn-primary">Update Competition</button>
+    </form>
+</div>
+<footer th:replace="fragments :: footer"></footer>
+</body>
+</html>
