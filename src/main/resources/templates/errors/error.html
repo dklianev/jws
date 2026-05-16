@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments :: head"></head>
+<body>
+<header th:replace="fragments :: header"></header>
+<h4>Error</h4>
+<div class="col-6">
+    <p th:text="${message}"></p>
+</div>
+<footer th:replace="fragments :: footer"></footer>
+</body>
+</html>
