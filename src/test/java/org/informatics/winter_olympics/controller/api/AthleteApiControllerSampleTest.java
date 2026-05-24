@@ -72,6 +72,28 @@ class AthleteApiControllerSampleTest {
     }
 
     @Test
+    @WithMockUser(authorities = {"ADMIN"})
+    void invalidAthleteReturnsBadRequestTest() throws Exception {
+        CreateAthleteDto athlete = CreateAthleteDto.builder()
+                .firstName("")
+                .lastName("O")
+                .country("")
+                .gender(null)
+                .dateOfBirth(LocalDate.now().plusDays(1))
+                .build();
+
+        mockMvc.perform(MockMvcRequestBuilders
+                        .post("/api/athletes")
+                        .with(csrf())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(athlete)))
+                .andDo(print())
+                .andExpect(status().isBadRequest());
+
+        Mockito.verify(athleteService, Mockito.never()).createAthlete(any());
+    }
+
+    @Test
     @WithMockUser(authorities = {"ATHLETE"})
     void athleteCannotCreateOtherAthleteTest() throws Exception {
         AthleteDto athlete = AthleteDto.builder()
