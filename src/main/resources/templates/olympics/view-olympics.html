@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="fragments :: head"></head>
+<head th:replace="~{fragments :: head}"></head>
 <body>
-<header th:replace="fragments :: header"></header>
+<header th:replace="~{fragments :: header}"></header>
 <h4>Olympics Details</h4>
 <div class="col-6">
     <table class="table table-hover">
@@ -34,6 +34,6 @@
     <a class="btn btn-info" th:href="@{'/olympics/edit-olympics/'+${olympics.id}}">Edit</a>
     <a class="btn btn-secondary" href="/olympics">Back</a>
 </div>
-<footer th:replace="fragments :: footer"></footer>
+<footer th:replace="~{fragments :: footer}"></footer>
 </body>
 </html>

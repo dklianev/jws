@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="fragments :: head"></head>
+<head th:replace="~{fragments :: head}"></head>
 <body>
-<header th:replace="fragments :: header"></header>
+<header th:replace="~{fragments :: header}"></header>
 <h4>Enter Slalom Result</h4>
 <div class="col-6">
     <form action="#" th:action="@{/results/slalom/create}" th:object="${result}" method="post">
@@ -32,6 +32,6 @@
         <button type="submit" class="btn btn-primary">Save Result</button>
     </form>
 </div>
-<footer th:replace="fragments :: footer"></footer>
+<footer th:replace="~{fragments :: footer}"></footer>
 </body>
 </html>

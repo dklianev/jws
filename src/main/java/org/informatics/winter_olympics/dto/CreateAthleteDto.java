@@ -33,6 +33,7 @@ public class CreateAthleteDto {
     @NotNull
     private Gender gender;
 
+    @NotNull
     @Past
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate dateOfBirth;

@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="fragments :: head"></head>
+<head th:replace="~{fragments :: head}"></head>
 <body>
-<header th:replace="fragments :: header"></header>
+<header th:replace="~{fragments :: header}"></header>
 <h4>Register Athlete Profile</h4>
 <div class="col-6">
     <form action="#" th:action="@{/athletes/self-register}" th:object="${athlete}" method="post">
@@ -27,6 +27,6 @@
         <button type="submit" class="btn btn-primary">Register Profile</button>
     </form>
 </div>
-<footer th:replace="fragments :: footer"></footer>
+<footer th:replace="~{fragments :: footer}"></footer>
 </body>
 </html>

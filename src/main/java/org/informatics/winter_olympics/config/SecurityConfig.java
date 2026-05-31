@@ -67,6 +67,7 @@ public class SecurityConfig {
                                         .requestMatchers(HttpMethod.GET, "/api/athletes/**").authenticated()
                                         .requestMatchers(HttpMethod.POST, "/athletes/self-register").hasAuthority("ATHLETE")
                                         .requestMatchers(HttpMethod.POST, "/api/athletes/self-register").hasAuthority("ATHLETE")
+                                        .requestMatchers("/registrations/**").hasAuthority("ATHLETE")
                                         .requestMatchers(HttpMethod.POST, "/athletes/create").hasAuthority("ADMIN")
                                         .requestMatchers(HttpMethod.POST, "/api/athletes").hasAuthority("ADMIN")
                                         .requestMatchers("/athletes/**").hasAnyAuthority("ADMIN", "ATHLETE")
@@ -85,6 +86,7 @@ public class SecurityConfig {
                                         .anyRequest().authenticated()
                         )
                 .httpBasic(Customizer.withDefaults())
+                .csrf(csrf -> csrf.ignoringRequestMatchers("/api/**"))
         ;
         return http.build();
     }

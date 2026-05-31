@@ -106,6 +106,7 @@ public class RankingServiceImpl implements RankingService {
     }
 
     private List<RankingEntryDto> getSlalomRanking(long competitionId) {
+        slalomResultService.calculateSecondRunQualifiers(competitionId);
         List<SlalomResult> rankedResults = slalomResultRepository.findByCompetitionId(competitionId)
                 .stream()
                 .filter(result -> result.getTotalTime() != null)

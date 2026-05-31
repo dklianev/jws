@@ -47,7 +47,8 @@ public class SlalomResult extends Result {
 
     @Transient
     public BigDecimal getTotalTime() {
-        if (firstRunTime == null || secondRunTime == null || firstRunDnf || secondRunDnf || isDidNotFinish()) {
+        if (!qualifiedForSecondRun || firstRunTime == null || secondRunTime == null
+                || firstRunDnf || secondRunDnf || isDidNotFinish()) {
             return null;
         }
         return firstRunTime.add(secondRunTime);

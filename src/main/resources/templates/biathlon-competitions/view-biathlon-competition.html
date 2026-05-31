@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="fragments :: head"></head>
+<head th:replace="~{fragments :: head}"></head>
 <body>
-<header th:replace="fragments :: header"></header>
+<header th:replace="~{fragments :: header}"></header>
 <h4>Biathlon Competition Details</h4>
 <div class="col-6">
     <table class="table table-hover">
@@ -46,6 +46,6 @@
     <a class="btn btn-info" th:href="@{'/biathlon-competitions/edit-biathlon-competition/'+${competition.id}}">Edit</a>
     <a class="btn btn-secondary" href="/biathlon-competitions">Back</a>
 </div>
-<footer th:replace="fragments :: footer"></footer>
+<footer th:replace="~{fragments :: footer}"></footer>
 </body>
 </html>

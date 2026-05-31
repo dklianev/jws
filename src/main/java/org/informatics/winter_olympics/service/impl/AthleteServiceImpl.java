@@ -81,6 +81,11 @@ public class AthleteServiceImpl implements AthleteService {
     @Override
     @PreAuthorize("hasAuthority('ADMIN') or @athleteServiceImpl.isAthleteOwner(#id, authentication.name)")
     public void deleteAthlete(long id) {
+        User linkedUser = userRepository.findByAthleteId(id);
+        if (linkedUser != null) {
+            linkedUser.setAthlete(null);
+            userRepository.save(linkedUser);
+        }
         athleteRepository.deleteById(id);
     }
 

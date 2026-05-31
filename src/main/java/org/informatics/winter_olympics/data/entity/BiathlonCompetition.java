@@ -4,6 +4,7 @@ import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,6 +26,7 @@ public class BiathlonCompetition extends Competition {
     @Min(value = 0, message = "Shooting stages count cannot be negative")
     private int shootingStagesCount;
 
+    @NotNull
     @DecimalMin(value = "0.0", message = "Penalty seconds cannot be negative")
     private BigDecimal penaltySecondsPerMiss;
 

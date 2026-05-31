@@ -36,6 +36,7 @@ public class Athlete extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private Gender gender;
 
+    @NotNull
     @Past
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate dateOfBirth;

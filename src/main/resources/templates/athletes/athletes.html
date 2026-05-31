@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="fragments :: head"></head>
+<head th:replace="~{fragments :: head}"></head>
 <body>
-<header th:replace="fragments :: header"></header>
+<header th:replace="~{fragments :: header}"></header>
 <h4>Athletes:</h4>
 <div class="col-10">
     <h3 th:unless="${athletes} and ${athletes.size()}">There are no athletes!</h3>
@@ -26,8 +26,8 @@
             <td><a class="btn btn-danger" th:href="@{'/athletes/delete/'+${athlete.id}}">Delete</a></td>
         </tr>
     </table>
-    <a class="btn btn-primary" href="/athletes/create-athlete">Save Athlete</a>
+    <a class="btn btn-primary" href="/athletes/create-athlete">Create Athlete</a>
 </div>
-<footer th:replace="fragments :: footer"></footer>
+<footer th:replace="~{fragments :: footer}"></footer>
 </body>
 </html>

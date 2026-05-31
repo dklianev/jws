@@ -23,6 +23,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.Period;
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -111,16 +112,21 @@ public class SlalomResultServiceImpl implements SlalomResultService {
     public List<SlalomResultDto> calculateSecondRunQualifiers(long competitionId) {
         SlalomCompetition competition = slalomCompetitionRepository.findById(competitionId)
                 .orElseThrow(() -> new CompetitionNotFoundException(competitionId));
-        List<SlalomResult> firstRunResults = slalomResultRepository
-                .findByCompetitionIdAndFirstRunDnfFalseAndFirstRunTimeIsNotNullOrderByFirstRunTimeAsc(competitionId)
+        List<SlalomResult> allResults = slalomResultRepository.findByCompetitionId(competitionId);
+        allResults.forEach(result -> result.setQualifiedForSecondRun(false));
+
+        List<SlalomResult> firstRunResults = allResults
                 .stream()
+                .filter(result -> !result.isFirstRunDnf())
+                .filter(result -> result.getFirstRunTime() != null)
                 .filter(result -> !result.isDidNotFinish())
+                .sorted(Comparator.comparing(SlalomResult::getFirstRunTime))
                 .toList();
 
         for (int i = 0; i < firstRunResults.size(); i++) {
             firstRunResults.get(i).setQualifiedForSecondRun(i < competition.getSecondRunCutoff());
         }
-        slalomResultRepository.saveAll(firstRunResults);
+        slalomResultRepository.saveAll(allResults);
         return firstRunResults.stream()
                 .filter(SlalomResult::isQualifiedForSecondRun)
                 .map(this::mapResult)

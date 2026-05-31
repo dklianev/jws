@@ -2,6 +2,7 @@ package org.informatics.winter_olympics.service.impl;
 
 import org.informatics.winter_olympics.config.ModelMapperConfig;
 import org.informatics.winter_olympics.data.entity.Athlete;
+import org.informatics.winter_olympics.data.entity.User;
 import org.informatics.winter_olympics.data.repository.AthleteRepository;
 import org.informatics.winter_olympics.data.repository.UserRepository;
 import org.junit.jupiter.api.Test;
@@ -45,5 +46,19 @@ class AthleteServiceImplSampleTest {
         Mockito.when(modelMapperConfig.mapList(any(), any())).thenReturn(List.of(athlete1, athlete2));
 
         assertEquals(2, athleteService.getAthletes().size());
+    }
+
+    @Test
+    void deleteAthleteUnlinksUserBeforeDeletingAthlete() {
+        User user = new User();
+        user.setAthlete(athlete1);
+
+        Mockito.when(userRepository.findByAthleteId(1L)).thenReturn(user);
+
+        athleteService.deleteAthlete(1L);
+
+        assertNull(user.getAthlete());
+        Mockito.verify(userRepository).save(user);
+        Mockito.verify(athleteRepository).deleteById(1L);
     }
 }

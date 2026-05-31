@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="fragments :: head"></head>
+<head th:replace="~{fragments :: head}"></head>
 <body>
-<header th:replace="fragments :: header"></header>
+<header th:replace="~{fragments :: header}"></header>
 <h4>Slalom Competitions:</h4>
 <div class="col-10">
     <h3 th:unless="${competitions} and ${competitions.size()}">There are no slalom competitions!</h3>
@@ -30,8 +30,8 @@
             <td><a class="btn btn-danger" th:href="@{'/slalom-competitions/delete/'+${competition.id}}">Delete</a></td>
         </tr>
     </table>
-    <a class="btn btn-primary" href="/slalom-competitions/create-slalom-competition">Save Slalom Competition</a>
+    <a class="btn btn-primary" href="/slalom-competitions/create-slalom-competition">Create Slalom Competition</a>
 </div>
-<footer th:replace="fragments :: footer"></footer>
+<footer th:replace="~{fragments :: footer}"></footer>
 </body>
 </html>

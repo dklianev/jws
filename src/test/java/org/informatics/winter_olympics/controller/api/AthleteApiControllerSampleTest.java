@@ -73,6 +73,29 @@ class AthleteApiControllerSampleTest {
 
     @Test
     @WithMockUser(authorities = {"ADMIN"})
+    void apiCreateAthleteDoesNotRequireCsrfTokenTest() throws Exception {
+        AthleteDto athlete = AthleteDto.builder()
+                .id(1L)
+                .firstName("Marco")
+                .lastName("Odermatt")
+                .country("Switzerland")
+                .gender(Gender.MALE)
+                .dateOfBirth(LocalDate.of(1997, 10, 8))
+                .build();
+
+        Mockito.when(athleteService.createAthlete(any())).thenReturn(athlete);
+
+        mockMvc.perform(MockMvcRequestBuilders
+                        .post("/api/athletes")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(athlete)))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.country", is(athlete.getCountry())));
+    }
+
+    @Test
+    @WithMockUser(authorities = {"ADMIN"})
     void invalidAthleteReturnsBadRequestTest() throws Exception {
         CreateAthleteDto athlete = CreateAthleteDto.builder()
                 .firstName("")
@@ -85,6 +108,27 @@ class AthleteApiControllerSampleTest {
         mockMvc.perform(MockMvcRequestBuilders
                         .post("/api/athletes")
                         .with(csrf())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(athlete)))
+                .andDo(print())
+                .andExpect(status().isBadRequest());
+
+        Mockito.verify(athleteService, Mockito.never()).createAthlete(any());
+    }
+
+    @Test
+    @WithMockUser(authorities = {"ADMIN"})
+    void athleteWithoutDateOfBirthReturnsBadRequestTest() throws Exception {
+        CreateAthleteDto athlete = CreateAthleteDto.builder()
+                .firstName("Marco")
+                .lastName("Odermatt")
+                .country("Switzerland")
+                .gender(Gender.MALE)
+                .dateOfBirth(null)
+                .build();
+
+        mockMvc.perform(MockMvcRequestBuilders
+                        .post("/api/athletes")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(athlete)))
                 .andDo(print())

@@ -69,12 +69,14 @@ class SlalomRankingServiceTest {
                 .athlete(athlete1)
                 .firstRunTime(BigDecimal.valueOf(52.000))
                 .secondRunTime(BigDecimal.valueOf(51.000))
+                .qualifiedForSecondRun(true)
                 .build();
         SlalomResult result2 = SlalomResult.builder()
                 .competition(competition)
                 .athlete(athlete2)
                 .firstRunTime(BigDecimal.valueOf(51.000))
                 .secondRunTime(BigDecimal.valueOf(50.000))
+                .qualifiedForSecondRun(true)
                 .build();
 
         Mockito.when(competitionRepository.findById(1L)).thenReturn(Optional.of(competition));
@@ -83,6 +85,60 @@ class SlalomRankingServiceTest {
         List<RankingEntryDto> ranking = rankingService.getCompetitionRanking(1L);
 
         assertEquals("Henrik Kristoffersen", ranking.getFirst().getAthleteName());
+        assertEquals(MedalType.GOLD, ranking.getFirst().getMedal());
+        Mockito.verify(slalomResultService).calculateSecondRunQualifiers(1L);
+    }
+
+    @Test
+    void slalomRankingIgnoresUnqualifiedSecondRunResult() {
+        SlalomCompetition competition = SlalomCompetition.builder()
+                .name("Men Slalom")
+                .gender(Gender.MALE)
+                .minAge(18)
+                .competitionDate(LocalDate.of(2026, 2, 12))
+                .secondRunCutoff(1)
+                .build();
+        competition.setId(1L);
+
+        Athlete qualifiedAthlete = Athlete.builder()
+                .firstName("Marco")
+                .lastName("Odermatt")
+                .country("Switzerland")
+                .gender(Gender.MALE)
+                .dateOfBirth(LocalDate.of(1997, 10, 8))
+                .build();
+        qualifiedAthlete.setId(1L);
+        Athlete unqualifiedAthlete = Athlete.builder()
+                .firstName("Unqualified")
+                .lastName("Skier")
+                .country("Norway")
+                .gender(Gender.MALE)
+                .dateOfBirth(LocalDate.of(1995, 1, 1))
+                .build();
+        unqualifiedAthlete.setId(2L);
+
+        SlalomResult qualifiedResult = SlalomResult.builder()
+                .competition(competition)
+                .athlete(qualifiedAthlete)
+                .firstRunTime(BigDecimal.valueOf(51.000))
+                .secondRunTime(BigDecimal.valueOf(52.000))
+                .qualifiedForSecondRun(true)
+                .build();
+        SlalomResult unqualifiedResult = SlalomResult.builder()
+                .competition(competition)
+                .athlete(unqualifiedAthlete)
+                .firstRunTime(BigDecimal.valueOf(80.000))
+                .secondRunTime(BigDecimal.valueOf(1.000))
+                .qualifiedForSecondRun(false)
+                .build();
+
+        Mockito.when(competitionRepository.findById(1L)).thenReturn(Optional.of(competition));
+        Mockito.when(slalomResultRepository.findByCompetitionId(1L)).thenReturn(List.of(qualifiedResult, unqualifiedResult));
+
+        List<RankingEntryDto> ranking = rankingService.getCompetitionRanking(1L);
+
+        assertEquals(1, ranking.size());
+        assertEquals("Marco Odermatt", ranking.getFirst().getAthleteName());
         assertEquals(MedalType.GOLD, ranking.getFirst().getMedal());
     }
 }

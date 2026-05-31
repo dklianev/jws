@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head}"></head>
+<body>
+<header th:replace="~{fragments :: header}"></header>
+
+<h4>Register for Competition</h4>
+<div class="col-10">
+    <div th:if="${message}" class="alert alert-success" th:text="${message}"></div>
+    <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+
+    <h5>Slalom competitions</h5>
+    <h6 th:unless="${slalomCompetitions} and ${slalomCompetitions.size()}">There are no slalom competitions.</h6>
+    <table th:if="${slalomCompetitions} and ${slalomCompetitions.size()>0}" class="table table-hover">
+        <th>Name</th>
+        <th>Gender</th>
+        <th>Date</th>
+        <th>Min Age</th>
+        <th>Olympics</th>
+        <th>Register</th>
+        <tr th:each="competition : ${slalomCompetitions}">
+            <td th:text="${competition.name}"></td>
+            <td th:text="${competition.gender}"></td>
+            <td th:text="${competition.competitionDate}"></td>
+            <td th:text="${competition.minAge}"></td>
+            <td th:text="${competition.olympicsName}"></td>
+            <td>
+                <form th:action="@{/registrations/slalom/{id}(id=${competition.id})}" method="post">
+                    <button type="submit" class="btn btn-primary">Register</button>
+                </form>
+            </td>
+        </tr>
+    </table>
+
+    <h5>Biathlon competitions</h5>
+    <h6 th:unless="${biathlonCompetitions} and ${biathlonCompetitions.size()}">There are no biathlon competitions.</h6>
+    <table th:if="${biathlonCompetitions} and ${biathlonCompetitions.size()>0}" class="table table-hover">
+        <th>Name</th>
+        <th>Gender</th>
+        <th>Date</th>
+        <th>Min Age</th>
+        <th>Laps</th>
+        <th>Shooting</th>
+        <th>Penalty</th>
+        <th>Olympics</th>
+        <th>Register</th>
+        <tr th:each="competition : ${biathlonCompetitions}">
+            <td th:text="${competition.name}"></td>
+            <td th:text="${competition.gender}"></td>
+            <td th:text="${competition.competitionDate}"></td>
+            <td th:text="${competition.minAge}"></td>
+            <td th:text="${competition.lapsCount}"></td>
+            <td th:text="${competition.shootingStagesCount}"></td>
+            <td th:text="${competition.penaltySecondsPerMiss}"></td>
+            <td th:text="${competition.olympicsName}"></td>
+            <td>
+                <form th:action="@{/registrations/biathlon/{id}(id=${competition.id})}" method="post">
+                    <button type="submit" class="btn btn-primary">Register</button>
+                </form>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<footer th:replace="~{fragments :: footer}"></footer>
+</body>
+</html>

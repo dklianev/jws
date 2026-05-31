@@ -41,6 +41,7 @@ public class CreateBiathlonCompetitionDto {
     @Min(value = 0, message = "Shooting stages count cannot be negative")
     private int shootingStagesCount;
 
+    @NotNull
     @DecimalMin(value = "0.0", message = "Penalty seconds cannot be negative")
     private BigDecimal penaltySecondsPerMiss;
 }

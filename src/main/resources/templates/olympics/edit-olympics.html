@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="fragments :: head"></head>
+<head th:replace="~{fragments :: head}"></head>
 <body>
-<header th:replace="fragments :: header"></header>
+<header th:replace="~{fragments :: header}"></header>
 <h4>Edit Olympics</h4>
 <div class="col-6">
     <form action="#" th:action="@{/olympics/update/{id}(id=${olympics.id})}" th:object="${olympics}" method="post">
@@ -22,6 +22,6 @@
         <button type="submit" class="btn btn-primary">Update Olympics</button>
     </form>
 </div>
-<footer th:replace="fragments :: footer"></footer>
+<footer th:replace="~{fragments :: footer}"></footer>
 </body>
 </html>
