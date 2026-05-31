@@ -48,46 +48,45 @@ public class SecurityConfig {
 
     @Bean
     public DaoAuthenticationProvider authProvider() {
-        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-        authProvider.setUserDetailsService(userService);
+        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider(userService);
         authProvider.setPasswordEncoder(passwordEncoder());
         return authProvider;
     }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.authorizeHttpRequests
-                        (
-                                authz -> authz
-                                        .requestMatchers("/", "/css/**", "/js/**").permitAll()
-                                        .requestMatchers(HttpMethod.GET, "/rankings/**").permitAll()
-                                        .requestMatchers(HttpMethod.GET, "/api/rankings/**").permitAll()
-                                        .requestMatchers(HttpMethod.GET, "/medals/**").permitAll()
-                                        .requestMatchers(HttpMethod.GET, "/athletes/**").authenticated()
-                                        .requestMatchers(HttpMethod.GET, "/api/athletes/**").authenticated()
-                                        .requestMatchers(HttpMethod.POST, "/athletes/self-register").hasAuthority("ATHLETE")
-                                        .requestMatchers(HttpMethod.POST, "/api/athletes/self-register").hasAuthority("ATHLETE")
-                                        .requestMatchers("/registrations/**").hasAuthority("ATHLETE")
-                                        .requestMatchers(HttpMethod.POST, "/athletes/create").hasAuthority("ADMIN")
-                                        .requestMatchers(HttpMethod.POST, "/api/athletes").hasAuthority("ADMIN")
-                                        .requestMatchers("/athletes/**").hasAnyAuthority("ADMIN", "ATHLETE")
-                                        .requestMatchers("/api/athletes/**").hasAnyAuthority("ADMIN", "ATHLETE")
-                                        .requestMatchers("/olympics/**").hasAuthority("ADMIN")
-                                        .requestMatchers("/api/olympics/**").hasAuthority("ADMIN")
-                                        .requestMatchers("/slalom-competitions/**").hasAuthority("ADMIN")
-                                        .requestMatchers("/api/slalom-competitions/**").hasAuthority("ADMIN")
-                                        .requestMatchers("/biathlon-competitions/**").hasAuthority("ADMIN")
-                                        .requestMatchers("/api/biathlon-competitions/**").hasAuthority("ADMIN")
-                                        .requestMatchers("/results/**").hasAuthority("ADMIN")
-                                        .requestMatchers(HttpMethod.POST, "/api/slalom-results/register/**").hasAuthority("ATHLETE")
-                                        .requestMatchers(HttpMethod.POST, "/api/biathlon-results/register/**").hasAuthority("ATHLETE")
-                                        .requestMatchers("/api/slalom-results/**").hasAuthority("ADMIN")
-                                        .requestMatchers("/api/biathlon-results/**").hasAuthority("ADMIN")
-                                        .anyRequest().authenticated()
-                        )
+        http.authorizeHttpRequests(authz -> authz
+                        .requestMatchers("/", "/css/**", "/js/**").permitAll()
+                        .requestMatchers("/login").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/rankings/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/rankings/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/medals/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/athletes/**").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/api/athletes/**").authenticated()
+                        .requestMatchers(HttpMethod.POST, "/athletes/self-register").hasAuthority("ATHLETE")
+                        .requestMatchers(HttpMethod.POST, "/api/athletes/self-register").hasAuthority("ATHLETE")
+                        .requestMatchers("/registrations/**").hasAuthority("ATHLETE")
+                        .requestMatchers(HttpMethod.POST, "/athletes/create").hasAuthority("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/api/athletes").hasAuthority("ADMIN")
+                        .requestMatchers("/athletes/**").hasAnyAuthority("ADMIN", "ATHLETE")
+                        .requestMatchers("/api/athletes/**").hasAnyAuthority("ADMIN", "ATHLETE")
+                        .requestMatchers("/olympics/**").hasAuthority("ADMIN")
+                        .requestMatchers("/api/olympics/**").hasAuthority("ADMIN")
+                        .requestMatchers("/slalom-competitions/**").hasAuthority("ADMIN")
+                        .requestMatchers("/api/slalom-competitions/**").hasAuthority("ADMIN")
+                        .requestMatchers("/biathlon-competitions/**").hasAuthority("ADMIN")
+                        .requestMatchers("/api/biathlon-competitions/**").hasAuthority("ADMIN")
+                        .requestMatchers("/results/**").hasAuthority("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/api/slalom-results/register/**").hasAuthority("ATHLETE")
+                        .requestMatchers(HttpMethod.POST, "/api/biathlon-results/register/**").hasAuthority("ATHLETE")
+                        .requestMatchers("/api/slalom-results/**").hasAuthority("ADMIN")
+                        .requestMatchers("/api/biathlon-results/**").hasAuthority("ADMIN")
+                        .anyRequest().authenticated()
+                )
+                .formLogin(Customizer.withDefaults())
                 .httpBasic(Customizer.withDefaults())
-                .csrf(csrf -> csrf.ignoringRequestMatchers("/api/**"))
-        ;
+                .logout(logout -> logout.logoutSuccessUrl("/").permitAll())
+                .csrf(csrf -> csrf.ignoringRequestMatchers("/api/**"));
         return http.build();
     }
 }
