@@ -10,6 +10,11 @@
         <th>Athlete</th>
         <th>Country</th>
         <th>Competition</th>
+        <th th:if="${showSlalomDetails}">Run 1 Time</th>
+        <th th:if="${showSlalomDetails}">Run 2 Time</th>
+        <th th:if="${showBiathlonDetails}">Skiing Time</th>
+        <th th:if="${showBiathlonDetails}">Missed Shots</th>
+        <th th:if="${showBiathlonDetails}">Penalty Seconds</th>
         <th>Final Time</th>
         <th>Medal</th>
         <tr th:each="row : ${ranking}">
@@ -17,6 +22,11 @@
             <td th:text="${row.athleteName}"></td>
             <td th:text="${row.country}"></td>
             <td th:text="${row.competitionName}"></td>
+            <td th:if="${showSlalomDetails}" th:text="${row.firstRunTime}"></td>
+            <td th:if="${showSlalomDetails}" th:text="${row.secondRunTime}"></td>
+            <td th:if="${showBiathlonDetails}" th:text="${row.skiingTimeSeconds}"></td>
+            <td th:if="${showBiathlonDetails}" th:text="${row.missedShots}"></td>
+            <td th:if="${showBiathlonDetails}" th:text="${row.penaltySeconds}"></td>
             <td th:text="${row.finalTime}"></td>
             <td th:text="${row.medal}"></td>
         </tr>
@@ -24,18 +34,20 @@
     <h5>Slalom Competitions</h5>
     <table th:if="${slalomCompetitions} and ${slalomCompetitions.size()>0}" class="table table-hover">
         <th>Name</th>
-        <th>Ranking</th>
+        <th>Run 1</th>
         <th>Run 2 Order</th>
+        <th>Final Ranking</th>
         <tr th:each="competition : ${slalomCompetitions}">
             <td th:text="${competition.name}"></td>
-            <td><a class="btn btn-info" th:href="@{'/rankings/competition/'+${competition.id}}">View</a></td>
+            <td><a class="btn btn-primary" th:href="@{'/rankings/first-run/'+${competition.id}}">View</a></td>
             <td><a class="btn btn-secondary" th:href="@{'/rankings/second-run/'+${competition.id}}">View</a></td>
+            <td><a class="btn btn-info" th:href="@{'/rankings/competition/'+${competition.id}}">View</a></td>
         </tr>
     </table>
     <h5>Biathlon Competitions</h5>
     <table th:if="${biathlonCompetitions} and ${biathlonCompetitions.size()>0}" class="table table-hover">
         <th>Name</th>
-        <th>Ranking</th>
+        <th>Ranking With Missed Shots</th>
         <tr th:each="competition : ${biathlonCompetitions}">
             <td th:text="${competition.name}"></td>
             <td><a class="btn btn-info" th:href="@{'/rankings/competition/'+${competition.id}}">View</a></td>

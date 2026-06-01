@@ -189,8 +189,8 @@ class AthleteApiControllerSampleTest {
     }
 
     @Test
-    @WithMockUser(authorities = {"ATHLETE"})
-    void getAthletesTest() throws Exception {
+    @WithMockUser(authorities = {"ADMIN"})
+    void adminCanGetAthletesTest() throws Exception {
         AthleteDto athlete1 = AthleteDto.builder()
                 .id(1L)
                 .firstName("Marco")
@@ -219,5 +219,32 @@ class AthleteApiControllerSampleTest {
                 .andExpect(jsonPath("$[1].id", is(athlete2.getId()), Long.class))
                 .andExpect(jsonPath("$[1].dateOfBirth", is("1991-04-27")))
                 .andDo(print());
+    }
+
+    @Test
+    @WithMockUser(authorities = {"ATHLETE"})
+    void athleteCannotReadOrModifyAthleteCatalogTest() throws Exception {
+        AthleteDto athlete = AthleteDto.builder()
+                .firstName("Marco")
+                .lastName("Odermatt")
+                .country("Switzerland")
+                .gender(Gender.MALE)
+                .dateOfBirth(LocalDate.of(1997, 10, 8))
+                .build();
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/athletes"))
+                .andExpect(status().isForbidden());
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/athletes/1"))
+                .andExpect(status().isForbidden());
+
+        mockMvc.perform(MockMvcRequestBuilders
+                        .put("/api/athletes/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(athlete)))
+                .andExpect(status().isForbidden());
+
+        mockMvc.perform(MockMvcRequestBuilders.delete("/api/athletes/1"))
+                .andExpect(status().isForbidden());
     }
 }

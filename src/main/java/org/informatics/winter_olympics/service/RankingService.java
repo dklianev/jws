@@ -10,6 +10,8 @@ import java.util.List;
 public interface RankingService {
     List<RankingEntryDto> getCompetitionRanking(long competitionId);
 
+    List<SlalomResultDto> getRunOneStandings(long competitionId);
+
     List<SlalomResultDto> getRunTwoStartOrder(long competitionId);
 
     List<MedalCountDto> getMedalTable(long olympicsId);

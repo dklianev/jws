@@ -12,14 +12,14 @@
         <div class="navbar-collapse show" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item active"><a class="nav-link" href="/">Home</a></li>
-                <li class="nav-item"><a class="nav-link" href="/athletes">Athletes</a></li>
-                <li class="nav-item"><a class="nav-link" href="/athletes/self-register">My Profile</a></li>
-                <li class="nav-item"><a class="nav-link" href="/registrations">Register</a></li>
-                <li class="nav-item"><a class="nav-link" href="/olympics">Olympics</a></li>
-                <li class="nav-item"><a class="nav-link" href="/slalom-competitions">Slalom</a></li>
-                <li class="nav-item"><a class="nav-link" href="/biathlon-competitions">Biathlon</a></li>
+                <li class="nav-item" th:if="${isAdmin}"><a class="nav-link" href="/athletes">Athletes</a></li>
+                <li class="nav-item" th:if="${isAthlete}"><a class="nav-link" href="/athletes/self-register">My Profile</a></li>
+                <li class="nav-item" th:if="${isAthlete}"><a class="nav-link" href="/registrations">Register</a></li>
+                <li class="nav-item" th:if="${isAdmin}"><a class="nav-link" href="/olympics">Olympics</a></li>
+                <li class="nav-item" th:if="${isAdmin}"><a class="nav-link" href="/slalom-competitions">Slalom</a></li>
+                <li class="nav-item" th:if="${isAdmin}"><a class="nav-link" href="/biathlon-competitions">Biathlon</a></li>
                 <li class="nav-item"><a class="nav-link" href="/rankings">Rankings</a></li>
-                <li class="nav-item">
+                <li class="nav-item" th:if="${isLoggedIn}">
                     <form th:action="@{/logout}" method="post" class="form-inline">
                         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
                         <button type="submit" class="btn btn-link nav-link">Logout</button>

@@ -29,11 +29,13 @@ public class AthleteServiceImpl implements AthleteService {
     private final UserRepository userRepository;
 
     @Override
+    @PreAuthorize("hasAuthority('ADMIN')")
     public List<AthleteDto> getAthletes() {
         return modelMapperConfig.mapList(athleteRepository.findAll(), AthleteDto.class);
     }
 
     @Override
+    @PreAuthorize("hasAuthority('ADMIN')")
     public AthleteDto getAthleteById(long id) {
         return modelMapperConfig.modelMapper().map(athleteRepository.findById(id)
                         .orElseThrow(() -> new AthleteNotFoundException(id)),
@@ -66,7 +68,7 @@ public class AthleteServiceImpl implements AthleteService {
     }
 
     @Override
-    @PreAuthorize("hasAuthority('ADMIN') or @athleteServiceImpl.isAthleteOwner(#id, authentication.name)")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public AthleteDto updateAthlete(@Valid AthleteDto athleteDto, long id) {
         Athlete updatedAthlete = athleteRepository.findById(id)
                 .orElseThrow(() -> new AthleteNotFoundException(id));
@@ -79,7 +81,7 @@ public class AthleteServiceImpl implements AthleteService {
     }
 
     @Override
-    @PreAuthorize("hasAuthority('ADMIN') or @athleteServiceImpl.isAthleteOwner(#id, authentication.name)")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public void deleteAthlete(long id) {
         User linkedUser = userRepository.findByAthleteId(id);
         if (linkedUser != null) {
@@ -89,42 +91,44 @@ public class AthleteServiceImpl implements AthleteService {
         athleteRepository.deleteById(id);
     }
 
-    public boolean isAthleteOwner(long athleteId, String username) {
-        User user = userRepository.findByUsername(username);
-        return user != null && user.getAthlete() != null && user.getAthlete().getId() == athleteId;
-    }
-
     @Override
+    @PreAuthorize("hasAuthority('ADMIN')")
     public List<AthleteDto> findByCountry(String country) {
         return modelMapperConfig.mapList(athleteRepository.findByCountry(country), AthleteDto.class);
     }
 
     @Override
+    @PreAuthorize("hasAuthority('ADMIN')")
     public List<AthleteDto> findByGender(Gender gender) {
         return modelMapperConfig.mapList(athleteRepository.findByGender(gender), AthleteDto.class);
     }
 
     @Override
+    @PreAuthorize("hasAuthority('ADMIN')")
     public List<AthleteDto> findByCountryAndGender(String country, Gender gender) {
         return modelMapperConfig.mapList(athleteRepository.findByCountryAndGender(country, gender), AthleteDto.class);
     }
 
     @Override
+    @PreAuthorize("hasAuthority('ADMIN')")
     public List<AthleteDto> findByDateOfBirthBefore(LocalDate dateOfBirth) {
         return modelMapperConfig.mapList(athleteRepository.findByDateOfBirthBefore(dateOfBirth), AthleteDto.class);
     }
 
     @Override
+    @PreAuthorize("hasAuthority('ADMIN')")
     public List<AthleteDto> findByDateOfBirthBetween(LocalDate startDate, LocalDate endDate) {
         return modelMapperConfig.mapList(athleteRepository.findByDateOfBirthBetween(startDate, endDate), AthleteDto.class);
     }
 
     @Override
+    @PreAuthorize("hasAuthority('ADMIN')")
     public List<AthleteDto> findByLastNameContainingOrderByFirstNameAsc(String text) {
         return modelMapperConfig.mapList(athleteRepository.findByLastNameContainingOrderByFirstNameAsc(text), AthleteDto.class);
     }
 
     @Override
+    @PreAuthorize("hasAuthority('ADMIN')")
     public long countByCountry(String country) {
         return athleteRepository.countByCountry(country);
     }

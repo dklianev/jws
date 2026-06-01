@@ -19,6 +19,11 @@ public class RankingEntryDto {
     private String country;
     private long competitionId;
     private String competitionName;
+    private BigDecimal firstRunTime;
+    private BigDecimal secondRunTime;
+    private BigDecimal skiingTimeSeconds;
+    private Integer missedShots;
+    private BigDecimal penaltySeconds;
     private BigDecimal finalTime;
     private MedalType medal;
 }

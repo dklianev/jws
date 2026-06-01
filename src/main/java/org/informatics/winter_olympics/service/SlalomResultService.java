@@ -22,5 +22,7 @@ public interface SlalomResultService {
 
     List<SlalomResultDto> calculateSecondRunQualifiers(long competitionId);
 
+    List<SlalomResultDto> getRunOneStandings(long competitionId);
+
     List<SlalomResultDto> getRunTwoStartOrder(long competitionId);
 }

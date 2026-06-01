@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.security.Principal;
 import java.util.List;
@@ -53,13 +54,14 @@ public class AthleteViewController {
 
     @PostMapping("/self-register")
     public String selfRegisterAthlete(@Valid @ModelAttribute("athlete") CreateAthleteDto athlete, BindingResult bindingResult,
-                                      Model model, Principal principal) {
+                                      Model model, Principal principal, RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
             model.addAttribute("genders", Gender.values());
             return "/athletes/self-register-athlete";
         }
         this.athleteService.selfRegisterAthlete(athlete, principal.getName());
-        return "redirect:/athletes";
+        redirectAttributes.addFlashAttribute("message", "Your athlete profile was created. You can now register for competitions.");
+        return "redirect:/registrations";
     }
 
     @GetMapping("/edit-athlete/{id}")

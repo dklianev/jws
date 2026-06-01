@@ -32,7 +32,7 @@ class ViewControllerSmokeTest {
         mockMvc.perform(get("/"))
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString("Winter Olympics Management System")))
-                .andExpect(content().string(containsString("Athletes")));
+                .andExpect(content().string(containsString("Rankings")));
     }
 
     @Test
@@ -49,6 +49,26 @@ class ViewControllerSmokeTest {
         mockMvc.perform(get("/login"))
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString("Please sign in")));
+    }
+
+    @Test
+    void athleteLoginRedirectsToCompetitionRegistrationPage() throws Exception {
+        mockMvc.perform(post("/login")
+                        .with(csrf())
+                        .param("username", "athlete1")
+                        .param("password", "athlete1"))
+                .andExpect(status().isFound())
+                .andExpect(redirectedUrl("/registrations"));
+    }
+
+    @Test
+    void adminLoginRedirectsToAthleteManagementPage() throws Exception {
+        mockMvc.perform(post("/login")
+                        .with(csrf())
+                        .param("username", "admin1")
+                        .param("password", "admin1"))
+                .andExpect(status().isFound())
+                .andExpect(redirectedUrl("/athletes"));
     }
 
     @Test
@@ -102,6 +122,35 @@ class ViewControllerSmokeTest {
 
     @Test
     @WithMockUser(username = "athlete1", authorities = "ATHLETE")
+    void athleteSelfRegisterRedirectsToCompetitionRegistrationPage() throws Exception {
+        mockMvc.perform(post("/athletes/self-register")
+                        .with(csrf())
+                        .param("firstName", "Marco")
+                        .param("lastName", "Odermatt")
+                        .param("country", "Switzerland")
+                        .param("gender", "MALE")
+                        .param("dateOfBirth", "1997-10-08"))
+                .andExpect(status().isFound())
+                .andExpect(redirectedUrl("/registrations"));
+    }
+
+    @Test
+    @WithMockUser(username = "athlete1", authorities = "ATHLETE")
+    void athleteAdminPagesRedirectToCompetitionRegistrationPage() throws Exception {
+        for (String path : List.of(
+                "/athletes",
+                "/athletes/create-athlete",
+                "/athletes/edit-athlete/1",
+                "/athletes/delete/1"
+        )) {
+            mockMvc.perform(get(path))
+                    .andExpect(status().isFound())
+                    .andExpect(redirectedUrl("/registrations"));
+        }
+    }
+
+    @Test
+    @WithMockUser(username = "athlete1", authorities = "ATHLETE")
     void athleteCompetitionRegistrationPageRenders() throws Exception {
         mockMvc.perform(get("/registrations"))
                 .andExpect(status().isOk())
@@ -112,7 +161,8 @@ class ViewControllerSmokeTest {
     @WithMockUser(authorities = "ADMIN")
     void adminCannotOpenAthleteCompetitionRegistrationPage() throws Exception {
         mockMvc.perform(get("/registrations"))
-                .andExpect(status().isForbidden());
+                .andExpect(status().isFound())
+                .andExpect(redirectedUrl("/athletes"));
     }
 
     @Test

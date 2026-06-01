@@ -58,6 +58,11 @@ public class RankingServiceImpl implements RankingService {
     }
 
     @Override
+    public List<SlalomResultDto> getRunOneStandings(long competitionId) {
+        return slalomResultService.getRunOneStandings(competitionId);
+    }
+
+    @Override
     public List<SlalomResultDto> getRunTwoStartOrder(long competitionId) {
         return slalomResultService.getRunTwoStartOrder(competitionId);
     }
@@ -137,7 +142,7 @@ public class RankingServiceImpl implements RankingService {
     }
 
     private RankingEntryDto mapRankingEntry(Result result, BigDecimal finalTime, int position) {
-        return RankingEntryDto.builder()
+        RankingEntryDto.RankingEntryDtoBuilder builder = RankingEntryDto.builder()
                 .position(position)
                 .athleteId(result.getAthlete().getId())
                 .athleteName(result.getAthlete().getFirstName() + " " + result.getAthlete().getLastName())
@@ -145,8 +150,21 @@ public class RankingServiceImpl implements RankingService {
                 .competitionId(result.getCompetition().getId())
                 .competitionName(result.getCompetition().getName())
                 .finalTime(finalTime)
-                .medal(getMedal(position))
-                .build();
+                .medal(getMedal(position));
+
+        if (result instanceof SlalomResult slalomResult) {
+            builder.firstRunTime(slalomResult.getFirstRunTime())
+                    .secondRunTime(slalomResult.getSecondRunTime());
+        }
+        if (result instanceof BiathlonResult biathlonResult) {
+            BigDecimal penaltySeconds = ((BiathlonCompetition) biathlonResult.getCompetition())
+                    .getPenaltySecondsPerMiss()
+                    .multiply(BigDecimal.valueOf(biathlonResult.getMissedShots()));
+            builder.skiingTimeSeconds(biathlonResult.getSkiingTimeSeconds())
+                    .missedShots(biathlonResult.getMissedShots())
+                    .penaltySeconds(penaltySeconds);
+        }
+        return builder.build();
     }
 
     private MedalType getMedal(int position) {

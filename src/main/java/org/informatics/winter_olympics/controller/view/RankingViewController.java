@@ -1,6 +1,7 @@
 package org.informatics.winter_olympics.controller.view;
 
 import lombok.RequiredArgsConstructor;
+import org.informatics.winter_olympics.dto.RankingEntryDto;
 import org.informatics.winter_olympics.service.BiathlonCompetitionService;
 import org.informatics.winter_olympics.service.OlympicsService;
 import org.informatics.winter_olympics.service.RankingService;
@@ -8,6 +9,8 @@ import org.informatics.winter_olympics.service.SlalomCompetitionService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -28,8 +31,19 @@ public class RankingViewController {
 
     @GetMapping("/competition/{competitionId}")
     public String getCompetitionRanking(Model model, @PathVariable long competitionId) {
-        model.addAttribute("ranking", rankingService.getCompetitionRanking(competitionId));
+        List<RankingEntryDto> ranking = rankingService.getCompetitionRanking(competitionId);
+        model.addAttribute("ranking", ranking);
+        model.addAttribute("showSlalomDetails", ranking.stream()
+                .anyMatch(row -> row.getFirstRunTime() != null || row.getSecondRunTime() != null));
+        model.addAttribute("showBiathlonDetails", ranking.stream()
+                .anyMatch(row -> row.getSkiingTimeSeconds() != null || row.getMissedShots() != null));
         return "/rankings/competition-ranking.html";
+    }
+
+    @GetMapping("/first-run/{competitionId}")
+    public String getRunOneStandings(Model model, @PathVariable long competitionId) {
+        model.addAttribute("results", rankingService.getRunOneStandings(competitionId));
+        return "/rankings/first-run.html";
     }
 
     @GetMapping("/second-run/{competitionId}")

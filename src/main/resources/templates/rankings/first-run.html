@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head}"></head>
+<body>
+<header th:replace="~{fragments :: header}"></header>
+<h4>First Run Standings</h4>
+<div class="col-8">
+    <h3 th:unless="${results} and ${results.size()}">There are no first run results!</h3>
+    <table th:if="${results} and ${results.size()>0}" class="table table-hover">
+        <th>Position</th>
+        <th>Athlete</th>
+        <th>Country</th>
+        <th>First Run Time</th>
+        <th>DNF</th>
+        <th>Qualified For Run 2</th>
+        <tr th:each="result, iterStat : ${results}">
+            <td th:text="${result.firstRunTime != null and !result.firstRunDnf ? iterStat.count : '-'}"></td>
+            <td th:text="${result.athleteName}"></td>
+            <td th:text="${result.country}"></td>
+            <td th:text="${result.firstRunTime != null ? result.firstRunTime : '-'}"></td>
+            <td th:text="${result.firstRunDnf ? 'Yes' : 'No'}"></td>
+            <td th:text="${result.qualifiedForSecondRun ? 'Yes' : 'No'}"></td>
+        </tr>
+    </table>
+</div>
+<footer th:replace="~{fragments :: footer}"></footer>
+</body>
+</html>

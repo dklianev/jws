@@ -134,6 +134,20 @@ public class SlalomResultServiceImpl implements SlalomResultService {
     }
 
     @Override
+    public List<SlalomResultDto> getRunOneStandings(long competitionId) {
+        calculateSecondRunQualifiers(competitionId);
+        return slalomResultRepository.findByCompetitionId(competitionId)
+                .stream()
+                .sorted(Comparator
+                        .comparing((SlalomResult result) -> !hasValidFirstRun(result))
+                        .thenComparing(SlalomResult::getFirstRunTime, Comparator.nullsLast(Comparator.naturalOrder()))
+                        .thenComparing(result -> result.getAthlete().getLastName())
+                        .thenComparing(result -> result.getAthlete().getFirstName()))
+                .map(this::mapResult)
+                .toList();
+    }
+
+    @Override
     public List<SlalomResultDto> getRunTwoStartOrder(long competitionId) {
         calculateSecondRunQualifiers(competitionId);
         return slalomResultRepository.findByCompetitionIdAndQualifiedForSecondRunTrueOrderByFirstRunTimeDesc(competitionId)
@@ -164,6 +178,10 @@ public class SlalomResultServiceImpl implements SlalomResultService {
         resultDto.setCompetitionName(result.getCompetition().getName());
         resultDto.setTotalTime(result.getTotalTime());
         return resultDto;
+    }
+
+    private boolean hasValidFirstRun(SlalomResult result) {
+        return !result.isFirstRunDnf() && result.getFirstRunTime() != null;
     }
 
     private BigDecimal formatTime(BigDecimal time) {

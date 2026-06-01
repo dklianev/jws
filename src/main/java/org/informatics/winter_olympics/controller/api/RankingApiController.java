@@ -22,6 +22,11 @@ public class RankingApiController {
         return rankingService.getCompetitionRanking(competitionId);
     }
 
+    @GetMapping("/competition/{competitionId}/first-run")
+    public List<SlalomResultDto> getRunOneStandings(@PathVariable long competitionId) {
+        return rankingService.getRunOneStandings(competitionId);
+    }
+
     @GetMapping("/competition/{competitionId}/second-run")
     public List<SlalomResultDto> getRunTwoStartOrder(@PathVariable long competitionId) {
         return rankingService.getRunTwoStartOrder(competitionId);
